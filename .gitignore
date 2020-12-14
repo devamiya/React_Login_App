@@ -21,3 +21,8 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+/src/Assets/data1.json
+/src/Components/Chart.js
+/src/Components/Home.js
+/src/Routes

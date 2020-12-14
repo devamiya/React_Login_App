@@ -1,25 +1,55 @@
-import logo from './logo.svg';
 import './App.css';
+import Login from "./Components/Login"
+import Dashboard from './Components/Dashboard';
+import store from "./Store/store";
+import {Provider} from "react-redux";
+import { useSelector} from 'react-redux'
+
+import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 
 function App() {
+  // const dispatch = useDispatch();
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <Provider store={store}>
+      <div className="App">
+      <Router>
+        <Switch>
+            <Route path="/login">
+              <Login />
+            </Route>
+            <PrivateRoute path="/Dashboard">
+              <Dashboard />
+            </PrivateRoute>
+          
+        </Switch>
+      </Router>
     </div>
+    </Provider>
+    
   );
 }
 
+
+function PrivateRoute({ children, ...rest }) {
+  
+  const  isAuthenticated = useSelector(state=> state.users.isAuthenticated);
+  return (
+    <Route
+      {...rest}
+      render={({ location }) =>
+      isAuthenticated ? (
+          children
+        ) : (
+          <Redirect
+            to={{
+              pathname: "/login",
+              state: { from: location }
+            }}
+          />
+        )
+      }
+    />
+  );
+}
 export default App;
